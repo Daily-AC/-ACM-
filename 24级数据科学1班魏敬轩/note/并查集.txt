@@ -1,0 +1,71 @@
+本质上就是在建树，将一个节点连接到相同的子节点上，最后根据有几个数来判断有几个集.
+主要操作就那么几个：
+初始化：不操作，每个节点根结点是自己
+查找：如果是自己，那么停止:不然，一直溯源，直到查找到根结点
+合并：将两个结点比较一下，如果是同一根节点，那么无需操作：反之，将矮的连到高的上面去:
+例题（未优化代码）：
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=1005;
+int a[maxn];
+void init_set()
+{
+	for(int i=0;i<maxn;i++)
+	a[i]=i;
+}
+int find_set(int x)
+{
+	return x==a[x]?x:find_set(a[x]);
+}
+void union_set(int x,int y)
+{
+	x=find_set(x);
+	y=find_set(y);
+	if(x!=y)a[x]=a[y];
+}
+优化后就好看多了，加入了高度，只要高度相同，那么高度加一就是了，不同，谁矮吃谁，查找也优化了，找的时候顺便把路径上的结点一起改变了。
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=1005;
+int a[maxn];
+int height[maxn+1];
+void init_set()
+{
+	for(int i=0;i<maxn;i++)
+	a[i]=i;
+	height[i]=0;                //树的高度 
+}
+int find_set(int x)
+{
+	if(x!=s[x])s[x]=find_set(s[x]);              //路径压缩，有可能爆栈捏; 
+	return s[x]; 
+}
+//退而求其次
+int find_set2(int x)
+{
+	int r=x;
+	while(s[r]!=x) r=s[r];                       //找到根结点
+	int i=x,j;
+	while(i!=r)
+	{
+		j=s[i];
+		s[i]=r;
+		i=j;
+	}
+	return r; 
+} 
+void union_set(int x,int y)             //合并优化 
+{
+	x=find_set(x);
+	y=find_set(y);                     //一定要记着先查找哦
+	if(height[x]==height[y])
+	{
+		height[x]=height[x]+1;             //合并，树的高度加一 
+		s[y]=x;
+	 } 
+	 else{                                   //矮树合并到高树上，高度不变 
+	 	if(height[x]<height[y]) s[x]=y;
+	 	else s[y]=x;
+	 }
+}
+#顺带一提，并查集可以用来检查是否成环，用来写最小生成树也挺好的
