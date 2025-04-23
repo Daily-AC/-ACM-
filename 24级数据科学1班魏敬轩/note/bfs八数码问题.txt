@@ -1,0 +1,87 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define maxn 10000001
+const int LEN = 362880;
+struct node{
+	int state[9];               //八数码的排列，即一个状态; 123456780
+	int dis;                      //记录到起点的距离； 
+};
+int dir[4][2]={{-1,0},{0,-1},{1,0},{0,1}};
+
+int visited[LEN]={0};               //与每个记录相对应的记录，使用cator表判重;
+int start[9];
+int goal[9];                           //目标状态
+long int factory[]={1,1,2,6,24,120,720,5040,40320,362880};
+                                           //cator表所使用常数;想算的话不难，只要n!就好了，用于统计大于多少个数，9!应该用不到，14!左右就直接炸了
+bool Cantor(int str[],int n)                     //最关键的cantor表，用来去重；
+{
+	long result = 0;
+	for(int i = 0;i < n;i++)
+	{
+		int counted=0;
+		for (int j=i+1;j<n;j++)
+		{
+			if(str[i]>str[j])                 //当前未出现元素排在第几个； 
+			++counted;
+		}
+		result +=counted * factory[n-i-1];               //排第几位 
+	}
+		if(!visited[result])
+		{
+			visited[result]=1;
+			return true; 
+		}
+		else
+		return false;
+	
+}
+ int bfs()
+ {
+ 	node head;
+ 	memcpy(head.state,start,sizeof(head.state));           //复制起点状态 
+ 	head.dis=0;
+ 	queue<node> q;
+ 	Cantor(head.state,9);                             //将起点标记一下，记录这个状态;
+ 	q.push(head);
+ 	while(!q.empty())
+ 	{
+ 		head=q.front();
+ 		if(memcmp(head.state,goal,sizeof(goal))==0)                  //cmp，比较，如果完全一致那么结束
+ 		return head.dis;
+ 		q.pop();
+ 		int z;
+ 		for(z=0;z < 9;z++)
+ 		{
+ 			if(head.state[z]==0)                              //算可以移动的小块在哪
+ 			break;
+		}
+		int x = z%3;                         //横纵坐标
+		int y = z/3;
+		for(int i=0;i < 4;i++)
+		{
+			int newx = x+dir[i][0];
+			int newy = y+dir[i][1];
+			int nz=newx + newy*3;
+			if(newx>=0 && newx<3 && newy>=0 && newy<3)
+			{
+				node newnode;
+				memcpy(&newnode,&head,sizeof(struct node));                     //复制一份
+				swap(newnode.state[z],newnode.state[nz]);                       //交换移动过的位置
+				newnode.dis++;                   
+				if(Cantor(newnode.state,9))                                //记录状态
+				q.push(newnode);
+			}
+		}
+	}
+	return -1;
+  } 
+int main() 
+{
+    for(int i=0;i<9;i++) cin >> start[i];
+    for(int i=0;i<9;i++) cin >> goal[i];
+    int num=bfs();
+    if(num!=-1)     cout << num << endl;
+    else            cout << "impossible" <<endl;
+    return 0;
+}    
