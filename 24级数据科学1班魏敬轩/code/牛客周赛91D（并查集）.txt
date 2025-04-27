@@ -1,0 +1,64 @@
+问题：给个数组，如果abs(a[i]-a[j]1)==1，自动给它两加条无向边，除此之外求最小加多少条边使得它可以一条走完，也就是成不成环；
+看到这个我就想到并查集了，我目前检查成环的不二之选。
+只需要将其按题目条件给它连边，最后检查有多少结点不在环上。
+#include<bits/stdc++.h>
+using namespace std;
+const int maxn=200005;
+int b[maxn];
+int h[maxn];
+void init_set(){
+    for(int i=0;i<maxn;i++){
+        b[i]=i;
+        h[i]=0;
+    }
+}
+int find_set(int x){
+    if(b[x]!=x)b[x]=find_set(b[x]);
+    return b[x];
+}
+void union_set(int x,int y){
+    x=find_set(x);
+    y=find_set(y);
+    if(h[x]==h[y]){
+        b[y]=x;
+        h[x]++;
+    }
+    else{
+        if(h[x]>h[y])b[y]=x;
+        else b[x]=y;
+    }
+}
+void solve(){
+    int n;
+    cin >> n;
+    vector<int> a(n+1);
+    for(int i=1;i<=n;i++)cin >> a[i];
+    sort(a.begin()+1,a.end());
+    init_set();
+    for(int i=2;i<=n;i++){
+        int r=i-1;
+        while(r>=1){
+            if(find_set(i)==find_set(r))
+                break;
+            if(a[i]-a[r]==1)
+            union_set(r,i);
+            if(a[i]-a[r]>=2)
+                break;
+            r--;
+        }
+    }
+    int cnt=0;
+    for(int i=1;i<=n;i++){
+        if(b[i]==i)cnt++;
+    }
+    cout << cnt-1 << endl;
+}	
+int main()
+{
+	int t;
+	cin >> t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
