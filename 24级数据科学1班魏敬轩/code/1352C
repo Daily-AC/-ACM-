@@ -1,0 +1,40 @@
+问题：给出n,k,求不能整除n的第k个整数。
+二分法的应用，不难看出来思路，二分也还好。不过为什么1200的题和1200的题会有这么大的差异。
+#include<bits/stdc++.h>
+using namespace std;
+long long co(long long n,long long mid){
+	if(mid<n) return mid;
+	if(n==mid) return mid-1;                 
+    int cnt=1;
+	cnt+=(mid-n)/n;
+	return mid-cnt; 
+}
+void solve(){
+      long long n,k;
+      cin >> n >> k;
+	   long long l=1,r=9000000000;
+	   long long mid;
+	   while(l<=r){
+	    mid=(r+l)/2;
+	   	if(co(n,mid)>k){
+	   		r=mid-1;
+		   }
+		else if(co(n,mid)<k){
+		   	l=mid+1;
+		   }
+		if(co(n,mid)==k){
+			  break;	
+		}
+	   }
+	   if(mid%n==0)mid-=1; 
+	   cout << mid << endl;
+}
+int main()
+{
+    int t;
+    cin >> t;
+    while(t--){
+    	solve();
+	}
+	return 0;
+}
