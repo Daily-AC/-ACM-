@@ -1,0 +1,67 @@
+问题：给一个排列，问你能不能找到一个子串，这个字串的两端不能是这个字串的最大值和最小值
+思路：用双指针检查串两端符合条件不？如果不，挪一下，挪不动就宣告失败。随时记录当前最大值和最小值，不需要检查每个子串，看需不需要更新就行。
+总结：思路想明白写出来凑合的不难，但是细节要慢慢修，如果不是用例给的多，怕不是修半天。还有，不会取名，想用全英文加下划线，但英语水平不行。
+#include<bits/stdc++.h>
+using namespace std;
+vector<bool> check(200008,true);         //我的最值储存.
+int c1(int c_max){                                //移动最大值
+	  		check[c_max]=false;
+	  		int r=c_max-1;
+	  		while(!check[r])
+	  		r--;
+	  		c_max=r;
+	  		return c_max;
+} 
+int c2(int c_min){
+	  		check[c_min]=false;                  //移动最小值
+	  		int r=c_min+1;
+	  		while(!check[r])
+	  		r++;
+	  		c_min=r;
+	  		return c_min;
+} 
+void solve(){
+      int n;
+      cin >> n;
+      vector<int> a(n+1);
+      for(int i=1;i<=n;i++)cin >> a[i]; 
+       int c_max=n,c_min=1;                 // c,current 之意,但我懒得写那么长了;
+       for(int i=0;i<=n+2;i++) check[i]=true;
+       check[n]=false,check[1]=false;
+	  for(int i=1,j=n;i<j;){
+	  	 if(c_max==0||c_min==n+1){
+	  	 	cout << -1 << endl;
+	  	 	return ;
+		   } 
+		if(a[i]==c_max){
+			check[a[i]]=false;
+		   i++; c_max=c1(c_max);	
+		}
+		else if(a[i]==c_min){
+			check[a[i]]=false;
+			i++;c_min=c2(c_min);
+		}  
+		else if(a[j]==c_max){
+			check[a[j]]=false;
+		   j--; c_max=c1(c_max);	
+		}
+		else if(a[j]==c_min){
+			check[a[j]]=false;
+			j--;c_min=c2(c_min);
+		}
+		if(a[i]!=c_max&&a[i]!=c_min&&a[j]!=c_max&&a[j]!=c_min) {
+			cout << i <<' ' << j << endl;
+			return ;
+		} 
+	  }
+	  cout << -1 << endl;
+}
+int main()
+{
+    int t;
+    cin >> t;
+    while(t--){
+    	solve();
+	}
+	return 0;
+}
