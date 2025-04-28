@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+#define ll long long
+#define ull unsigned long long
+#define endl "\n"
+#define N 1e9
+using namespace std;
+void doro()
+{
+	ll a,b;
+	cin >> a >> b;
+	cout << (a << b) << endl;
+	cout << (a >> b) << endl;
+	cout << ((a >> b) & 1 )<< endl;
+	cout << (a & ~(1 << b)) << endl;
+	cout << (a | (1 << b)) << endl;
+	cout << (a ^ (1 << b)) << endl;
+ }
+int main()
+{
+int t = 1;
+	//cin >> t;
+	while(t--)
+	{
+		doro();
+	}
+	return 0;
+}
