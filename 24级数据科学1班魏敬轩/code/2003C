@@ -1,0 +1,46 @@
+问题：给个字符串，如果它的字串满足以下条件：(i,j为端点，k为下标,k>=i&&k<j)1：Sk!=S(k+1).2:Sk!=Si||S(k+1)!Sj;
+思路：虽然题目说的很玄乎，但是一旦说出多个答案任选一个，我就知道有规律可以找了。简单观察一下，发现重复的aaaa，这种
+不满足条件，那我尽量少点这种字串不就好了
+#include<bits/stdc++.h>
+using namespace std;
+map<char,int> mp;
+bool cmp(char a,char b){
+	return mp[a]>mp[b];
+}
+void solve(){
+     int n;
+     cin >> n;
+     string s;
+     cin >> s;
+     sort(s.begin(),s.end());
+     for(int i=0;i<n;i++) mp[s[i]]++;
+     vector<char> ans;
+     for(auto it:mp){
+     	ans.push_back(it.first);
+	 }
+	 sort(ans.begin(),ans.end(),cmp);
+	 string l="";
+	 for(int i=0;i<ans.size();i++)l=l+ans[i];
+	 int cnt=0;
+	 for(int i=ans.size()-1;i>=0;i--){
+	 	mp[ans[i]]-=cnt;
+	 	if(mp[ans[i]]>0){
+	 		cnt+=mp[ans[i]];
+	 		for(int j=1;j<=mp[ans[i]];j++)
+	 		cout << l;
+	 		l.pop_back();
+		 }
+		 else l.pop_back();
+	 }
+     cout << endl;
+}	
+int main()
+{
+	int t;
+	cin >> t;
+	while(t--){
+		mp.clear();
+		solve();
+	}
+	return 0;
+}
