@@ -1,0 +1,42 @@
+题目描述：给你给数组，你可以将其中大于0的数减一，如果操作完最大值减去最小值>给定的值k，或者操作前发现不能进行操作了那么输掉比赛.
+思路:博弈论，虽然我不知道什么是博弈论，但是好歹有点经验了，一般来说，判定某人必输的条件，如果不存在必输条件，那么判断奇偶就是了。
+#include<bits/stdc++.h>
+using namespace std; 
+bool check(vector<long long>& a){
+	long long res=0;
+     	for(int i=0;i<a.size();i++){
+     		res+=a[i];
+		 }
+		 if(res%2==0) return false;
+		 return true; 
+}
+void solve(){
+     long long n,k;
+     cin >> n >> k;
+     vector<long long> a(n);
+     for(int i=0;i<n;i++) cin >> a[i];
+     sort(a.begin(),a.end());
+     long long ans=a[n-1]-a[0];
+     if(ans-k>1){
+		 cout << "Jerry" << endl; 
+	 	return ;
+	 }
+	 if(ans-1==k){
+	 	if(a[n-1]==a[n-2]){
+	 		cout << "Jerry" << endl;
+	 		return;
+		 }
+	 } 
+	 	if(check(a)) cout << "Tom" << endl;
+		 else cout << "Jerry" << endl;
+		 return ; 
+}	
+int main()
+{
+	int t;
+	cin >> t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
