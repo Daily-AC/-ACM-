@@ -1,0 +1,73 @@
+SUA 程序设计竞赛命题组的裁判们正在为即将举行的 2024 中国大学生程序设计竞赛全国邀请赛（山
+东）暨 CCPC 山东省大学生程序设计竞赛打印试题。
+文印店里共有 n 台打印机。第 i 台打印机每 ti 秒可以打印一份试题。然而，第 i 台打印机每次打印出
+li 份试题后，必须停机 wi 秒防止过热。也就是说，第 i 台打印机将重复进行以下工作计划：持续工作
+ti × li 秒，然后停机 wi 秒。
+裁判们将同时使用所有打印机。求打印 k 份试题至少需要多少秒。
+Input
+有多组测试数据。第一行输入一个整数 T（1 ≤ T ≤ 100）表示测试数据组数，对于每组测试数据：
+第一行输入两个整数 n 和 k（1 ≤ n ≤ 100，1 ≤ k ≤ 109）表示打印机的数量和需要的试题数量。
+对于接下来的 n 行，第 i 行输入三个整数 ti，li 和 wi（1 ≤ ti
+, li, wi ≤ 109）。它们的意义如上所述。
+Output
+每组数据输出一行一个整数，表示打印试题至少需要多少秒
+思路：第一眼看到以为是动态规划，可是标注属于签到题，再往下看看，发现可以用二分写，但是有坑，每个数都要开long long ,
+且如果不在求和时注意sum大小，那么会爆long long
+#include<bits/stdc++.h>
+using namespace std;
+
+long long j(long long a,long long t,long long l,long long w){          //用来计算产出.
+        long long ans=0; 
+      	long long y=a%(t*l+w);
+      	ans+=a/(t*l+w)*l+min(y/t,l);
+		  return ans;
+}
+
+
+void solve(){
+    
+    int n,k;
+    cin >> n >> k;
+    vector<long long> t(n+1),l(n+1),w(n+1);
+    for(int i=1;i<=n;i++) cin >> t[i] >> l[i] >> w[i];
+    long long ans=0ll;
+
+    long long z=0,r=2e18+1;    
+    while(z<=r){
+    	long long sum=0;
+        long long mid=z+(r-z)/2;
+        //cout << mid << ' ';
+        bool flag=false;
+        
+        for(int i=1;i<=n;i++){
+        	sum+=j(mid,t[i],l[i],w[i]);
+            if(sum>=k){
+            	flag=true;
+            	break;
+			}
+		}
+		
+		if(flag){
+			r=mid-1;
+		}
+		
+		
+		else{
+			z=mid+1;
+		}
+		
+	}
+	
+	cout << z << endl;
+}
+
+int main(){
+    
+    int t;
+    cin >> t;
+    while(t--){
+    	solve();
+	}
+	
+    return 0;
+}
