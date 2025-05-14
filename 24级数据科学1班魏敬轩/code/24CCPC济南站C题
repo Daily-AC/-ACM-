@@ -1,0 +1,46 @@
+考虑数轴上的 n 条线段，其中第 i 条线段的左端点为 li，右端点为 ri。您需要将每条线段涂上 k 种颜色
+中的一种，使得任意两条具有相同颜色的线段都没有重合。
+求给线段涂色的方案数。
+称第 i 条线段和第 j 条线段有重合，若存在一个实数 x 同时满足 li ≤ x ≤ ri 且 lj ≤ x ≤ rj。
+称两种涂色方案是不同的，若存在一条线段在两种方案中被涂上了不同的颜色。
+题解：经典的 interval partitioning 问题，区间划分最少组
+#include<bits/stdc++.h>
+using namespace std;
+#define mod 998244353
+
+
+void solve(){
+  
+  	int n,k;
+  	cin >> n >> k;
+  	vector<vector<int> > a(n,vector<int>(2));
+  	for(int i=0;i<n;i++) cin >> a[i][0] >> a[i][1];
+  	
+  	sort(a.begin(),a.end());
+  	priority_queue<int,vector<int>,greater<int>> pq;
+  	
+  	long long ans=1;
+  	int tem=k;
+  	for(auto& vec:a){
+  		while(!pq.empty()&&vec[0]>pq.top()){
+  			tem++;
+  			pq.pop();
+		  }
+		  ans*=tem--;
+		  ans=ans% mod;
+  		pq.push(vec[1]);
+	  }
+	  cout << ans << endl;
+	  
+}
+
+
+int main(){
+	
+	int t;
+	cin >> t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
