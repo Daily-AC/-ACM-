@@ -1,0 +1,38 @@
+题意：两人在数组上操作，每次要将a1减一，然后与ai(任选)换，问谁能赢，allice 先手，bob 后手
+思路：本来看是否奇偶的，以为大家都会选最大，知道全1，不得不死，不过这个思路错了，观察a1就够了，
+#include<bits/stdc++.h>
+using namespace std;
+#define mod 998244353
+#define long long ll
+
+void solve(){
+  
+	int n;
+	cin >> n;
+	vector<int> a(n);
+	for(int i=0;i<n;i++) cin >> a[i];
+	
+	int min1=1000000000;
+	for(int i=0;i<n;i++){
+		
+		if(a[i]<min1) min1=a[i];
+	}
+	
+	if(a[0]==min1){
+		cout << "Bob" << endl;
+	}
+	else{
+		cout << "Alice" << endl;
+	}
+}
+
+
+int main(){
+	
+	int t;
+	cin >> t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
