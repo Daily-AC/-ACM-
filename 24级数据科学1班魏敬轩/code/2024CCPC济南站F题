@@ -1,0 +1,56 @@
+给定长度为 n 的整数序列 a1, a2, · · · , an，请将序列分成 k 段连续且非空的子数组，使得序列中的每个
+元素恰属于一个子数组。令 si 表示从左到右第 i 个子数组里的元素之和，对于每个 1 ≤ k ≤ n，求下式
+的最大值。
+kXi=1i × si
+更正式地，对于每个 1 ≤ k ≤ n，令 r0 = 0 以及 rk = n，您需要找到 (k − 1) 个整数 r1, r2, · · · , rk−1 满
+足 r0 < r1 < r2 < · · · < rk−1 < rk，并最大化下式的值。kXi=1i × (ri Xj=ri−1+1aj )
+Input
+有多组测试数据。第一行输入一个整数 T 表示测试数据组数，对于每组测试数据：
+第一行输入一个整数 n（1 ≤ n ≤ 5 × 105）表示序列的长度。
+第二行输入 n 个整数 a1, a2, · · · , an（−106 ≤ ai ≤ 106）表示序列。
+保证所有数据 n 之和不超过 5 × 105。
+Output
+每组数据输出一行 n 个由单个空格分隔的整数 v1, v2, · · · , vn，其中 vi 表示 k = i 时的答案。
+思路：挺好玩的一题，划分区间，怎么划使得后面最大，可以使用后缀和解决，我想半天，看看别人的思路，直接被一脚踢死
+#include<bits/stdc++.h>
+using namespace std;
+
+void solve(){
+  
+  	int n;
+  	cin >> n;
+  	vector<int> a(n+1);
+  	for(int i=1;i<=n;++i) cin >> a[i];
+  	
+  	long long sum=0;   //用来存答案
+	priority_queue<long long> q;
+	vector<long long> subsum(n+2);
+	sum+=a[1];
+	
+	
+	for(int i=n;i>=2;i--){
+		sum+=a[i];
+		subsum[i]=subsum[i+1]+a[i];
+		q.push(subsum[i]);
+	}
+	
+	cout << sum << ' ';
+	while(!q.empty()){
+		long long p=q.top();
+		q.pop();
+		sum+=p;
+		cout << sum << ' ';
+	} 
+	cout << endl;
+}
+
+
+int main(){
+	
+	int t;
+	cin >> t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
