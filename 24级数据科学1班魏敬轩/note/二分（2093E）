@@ -1,0 +1,48 @@
+题目：给你一个长度为n的数组，要求分为k个不重叠的区间，问怎么分能使min(mexi)最大,
+mex:数组中最小的非负整数
+思路：二分，求最值用二分最为方便。这题是个很好的例子
+需要注意的是，这题要去重
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long 
+int n,k;
+
+bool check(int mid,vector<int>& a){
+   set<int> q;
+   int cnt=0;
+   
+   for(int i=1;i<=n;i++){
+   	if(a[i]<mid) q.insert(a[i]);
+   	if(q.size()==mid){
+   		cnt++;
+   		q.clear();
+	   }	
+   }
+   return cnt>=k;
+   	
+}
+ 
+void solve(){
+    
+	cin >> n >> k;
+	vector<int> a(n+1);
+	for(int i=1;i<=n;i++) cin >> a[i];
+	
+	int l=0,r=n+1;
+	while(l<r-1){
+		int mid=(l+r)/2;
+		if(check(mid,a)) l=mid; 
+		else r=mid;
+	}
+	cout << l <<endl; 
+}
+	
+int main()
+{
+	int t;
+	cin >> t;
+	while(t--){
+		solve();
+	}
+	return 0;
+}
